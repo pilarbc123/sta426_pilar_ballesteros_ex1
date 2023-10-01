@@ -1,0 +1,60 @@
+---
+title: "Exercise 01-b"
+format: html
+editor: visual
+---
+
+## Exercise 1b.
+
+### Sampling from log-normal distribution
+
+First, we draw 100 samples from a log-normal distribution with mean 5 and standard deviation = 0.5.
+
+The seed is chosen to ensure the reproducibility of the results.
+
+```{r}
+set.seed(42)
+sample <- rlnorm(100, meanlog = 5, sdlog = 0.5)
+sample_df <- data.frame(sample)
+
+```
+
+### Create the histogram using ggplot2 package
+
+First, load ggplot2:
+
+```{r}
+library(ggplot2)
+```
+
+Then, create a histogram using the geom_histogram() function. For the **linear** scale, we just plot the samples we obtained in *sample*.
+
+```{r}
+linear_histogram <- ggplot(sample_df, aes(x=sample)) + geom_histogram(binwidth=10) + ggtitle("Histogram in linear scale") + xlab("sample value") + ylab("frequency")
+
+
+linear_histogram
+```
+
+For the **log** scale, we will apply a *log* to the samples column in the data frame. We will also customize the histogram.
+
+```{r}
+
+log_histogram <- ggplot(sample_df, aes(x=log(sample))) + geom_histogram(color="black", fill="white") + ggtitle("Histogram in log scale") + xlab("log(sample value)") + ylab("frequency")
+
+log_histogram
+```
+
+### Create a violin plot with ggplot2
+
+```{r}
+violin_plot <- ggplot(sample_df, aes(x="", y=sample)) + geom_violin() + ggtitle("Violin plot in linear scale") + ylab("Values")
+violin_plot
+
+log_violin_plot <- ggplot(sample_df, aes(x="", y=log(sample))) + geom_violin(fill="#E69F00") + ggtitle("Violin plot in log scale") +ylab("Values") + xlab("")
+log_violin_plot
+```
+
+### Reporting the mean and the standard deviation
+
+The mean of the sampled values is `r round(mean(sample), digits = 2)`, and the standard deviation is `r round(sd(sample), digits = 2)`
